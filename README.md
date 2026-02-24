@@ -1,1 +1,3 @@
-# lorenz_project_repo
+# ATOC 4815 Lab / HW 4 - Lorenz Project
+### Written by undertherainysky
+
