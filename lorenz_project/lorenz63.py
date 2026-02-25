@@ -116,10 +116,26 @@ class Lorenz63:
         Start with Method 1. Once it works, do Method 2.
         """
         # TODO: implement ensemble integration
+        
+        ## METHOD 1:
         ensemble_size = initial_conditions.shape
-        ensemble = np.zeros(ensemble_size[0], n_steps+1, ensemble_size[1])
+        # print(f"{type(ensemble_size)}")
+        # ensemble_members = ensemble_size[0]
+        length = n_steps+1
+        print(f"{type(length)}")
+
+        ensemble = np.zeros([ensemble_size[0], length, ensemble_size[1]])
         for ii in range(0, ensemble_size[0]):
-            for jj in range(0, n_steps):
+            individual_member = self.run(initial_conditions[ii,:], dt, n_steps)
+            ensemble[ii, :, :] = individual_member
+        return ensemble
+
+        ## METHOD 2:
+
+
+
+
+                
                 
 
 
