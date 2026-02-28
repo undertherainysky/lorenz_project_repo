@@ -51,6 +51,24 @@ class Lorenz63:
         dz_dt = x*y - self.beta * z
         return np.array([dx_dt, dy_dt, dz_dt])
 
+    def vectorized_tendency(self, state):
+        # state = (n_members, 3)
+        derivatives = np.zeros(state.shape)
+        
+        # x, y, z = state # state must thus be [x, y, z]
+        # dx_dt = self.sigma*(y - x)
+        # dy_dt = x*(self.rho - z) - y
+        # dz_dt = x*y - self.beta * z
+        xs = state[:,0]
+        ys = state[:,1]
+        zs = state[:,2]
+        derivatives[:,0] = self.sigma*(ys-xs)
+        derivatives[:,1] = xs*(self.rho - zs) - ys
+        derivatives[:,2] = xs * ys - self.beta * zs
+        # print(f"{derivatives.shape}")
+        return derivatives
+
+
     def run(self, state0, dt, n_steps):
         """Integrate the model forward from a single initial condition.
 
@@ -124,13 +142,24 @@ class Lorenz63:
         length = n_steps+1
         print(f"{type(length)}")
 
-        ensemble = np.zeros([ensemble_size[0], length, ensemble_size[1]])
-        for ii in range(0, ensemble_size[0]):
-            individual_member = self.run(initial_conditions[ii,:], dt, n_steps)
-            ensemble[ii, :, :] = individual_member
-        return ensemble
+        # ensemble = np.zeros([ensemble_size[0], length, ensemble_size[1]])
+        # for ii in range(0, ensemble_size[0]):
+        #     individual_member = self.run(initial_conditions[ii,:], dt, n_steps)
+        #     ensemble[ii, :, :] = individual_member
+        # return ensemble
+
 
         ## METHOD 2:
+
+        vector_ensemble = np.zeros([ensemble_size[0], length, ensemble_size[1]])
+        # print(f"{vector_ensemble.shape}")
+        vector_ensemble[:,0,:] = initial_conditions
+        for jj in range(0, n_steps):
+            
+            vector_ensemble[:, jj+1, :] = vector_ensemble[:,jj,:] + dt * self.vectorized_tendency(vector_ensemble[:,jj,:])
+        return vector_ensemble
+
+
 
 
 
