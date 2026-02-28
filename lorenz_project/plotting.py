@@ -105,7 +105,13 @@ def plot_ensemble_panels(ensemble_list, reference_trajectory, titles,
     4. If save_path: plt.savefig(save_path, dpi=150, bbox_inches='tight')
     """
     # TODO: implement multi-panel figure
-    pass
+    fig, axes = plt.subplots(1,len(ensemble_list), figsize = figsize)
+    for ii in range(0, len(ensemble_list)):
+        plot_ensemble(axes,ensemble_list[ii], reference_trajectory, title = titles[ii])
+    plt.tight_layout()
+    if save_path != None:
+        plt.savefig(save_path, bbox_inches='tight', dpi = 150)
+
 
 
 if __name__ == "__main__":
