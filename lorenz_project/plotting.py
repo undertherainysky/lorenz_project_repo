@@ -26,7 +26,9 @@ def plot_attractor(ax, trajectory, color="steelblue", alpha=0.3, linewidth=0.5):
     Use ax.plot(x, z, ...) for the butterfly view.
     """
     # TODO: plot x vs z
-    pass
+    ax.plot(trajectory[:,0], trajectory[:,2], color=color, linewidth=linewidth)
+    ax.grid(alpha = alpha)
+    return
 
 
 def plot_ensemble(ax, ensemble_trajectories, reference_trajectory=None,
@@ -106,5 +108,6 @@ if __name__ == "__main__":
     fig, ax = plt.subplots()
     plot_attractor(ax, fake_traj)
     ax.set_title("plotting.py: visual test")
+    plt.savefig("Test_Plot_Verify,png", dpi=150, bbox_inches='tight')
     plt.show()
     print("plotting.py: visual check — does the plot look reasonable?")
