@@ -2,6 +2,7 @@
 """Plotting utilities for Lorenz63 ensemble experiments."""
 import numpy as np
 import matplotlib.pyplot as plt
+from lorenz_project.lorenz63 import Lorenz63
 
 
 def plot_attractor(ax, trajectory, color="steelblue", alpha=0.3, linewidth=0.5):
@@ -63,11 +64,12 @@ def plot_ensemble(ax, ensemble_trajectories, reference_trajectory=None,
     # TODO: implement ensemble plotting
     if reference_trajectory != None: 
         ax.plot(reference_trajectory, color = ref_color, alpha = 0.4)
-    for ii in range(0, len(ensemble_trajectories.shape[0])):
+    for ii in range(0, ensemble_trajectories.shape[0]):
         plot_attractor(ax, ensemble_trajectories[ii], color = ensemble_color, alpha = 0.8)
     ax.grid(alpha = 0.3)
     ax.set_title("Ensemble Trajectories")
     plt.savefig("Ensemble_Trajectories.png", dpi=150, bbox_inches='tight')
+    return
 
         
 
@@ -119,5 +121,19 @@ if __name__ == "__main__":
     plt.savefig("Test_Plot_Verify.png", dpi=150, bbox_inches='tight')
     plt.show()
     print("plotting.py: visual check — does the plot look reasonable?")
+    
+    # writing new tests to allow for testing ensemble plotting in this file
+        # (mix of lorenz63.py nameguard and new code) 
+    ics = np.array([[1.0, 1.0, 1.0]] * 5) + np.random.randn(5, 3) * 0.01
+
+    lorenz63_forTesting = Lorenz63()
+    ensemble = lorenz63_forTesting.run_ensemble(ics, dt=0.01, n_steps=1000)
+    fig_ens, ax_ens = plt.subplots()
+    plot_ensemble(ax_ens, ensemble)
+    
+
+
+
+
 
 
