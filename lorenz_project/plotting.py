@@ -61,7 +61,15 @@ def plot_ensemble(ax, ensemble_trajectories, reference_trajectory=None,
     3. Set title, labels, aspect ratio as desired.
     """
     # TODO: implement ensemble plotting
-    pass
+    if reference_trajectory != None: 
+        ax.plot(reference_trajectory, color = ref_color, alpha = 0.4)
+    for ii in range(0, len(ensemble_trajectories.shape[0])):
+        plot_attractor(ax, ensemble_trajectories[ii], color = ensemble_color, alpha = 0.8)
+    ax.grid(alpha = 0.3)
+    ax.set_title("Ensemble Trajectories")
+    plt.savefig("Ensemble_Trajectories.png", dpi=150, bbox_inches='tight')
+
+        
 
 
 def plot_ensemble_panels(ensemble_list, reference_trajectory, titles,
@@ -108,6 +116,8 @@ if __name__ == "__main__":
     fig, ax = plt.subplots()
     plot_attractor(ax, fake_traj)
     ax.set_title("plotting.py: visual test")
-    plt.savefig("Test_Plot_Verify,png", dpi=150, bbox_inches='tight')
+    plt.savefig("Test_Plot_Verify.png", dpi=150, bbox_inches='tight')
     plt.show()
     print("plotting.py: visual check — does the plot look reasonable?")
+
+
