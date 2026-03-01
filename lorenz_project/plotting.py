@@ -62,7 +62,7 @@ def plot_ensemble(ax, ensemble_trajectories, reference_trajectory=None,
     3. Set title, labels, aspect ratio as desired.
     """
     # TODO: implement ensemble plotting
-    if reference_trajectory != None: 
+    if reference_trajectory.any() != None: 
         ax.plot(reference_trajectory, color = ref_color, alpha = 0.4)
     for ii in range(0, ensemble_trajectories.shape[0]):
         plot_attractor(ax, ensemble_trajectories[ii], color = ensemble_color, alpha = 0.8)

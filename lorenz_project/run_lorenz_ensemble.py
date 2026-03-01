@@ -62,13 +62,13 @@ def main():
     # Spin up from (1, 1, 1) for SPINUP_STEPS, then take the final state
     # and run for REFERENCE_STEPS more. The long run IS your reference.
     state = np.zeros([SPINUP_STEPS, 3])
-    state[0,:] = (1,1,1)
+    state[0,:] = (1.0,1.0,1.0)
     # state = model.run([1,1,1], DT, SPINUP_STEPS)
-    state = model.run([1,1,1], DT, SPINUP_STEPS)
+    state = model.run(state[0,:], DT, SPINUP_STEPS)
      
     # for ii in range(1, SPINUP_STEPS):
     #   state[ii,:] = state[ii-1,:] + model.tendency(state[ii-1,:])*DT
-    plt.plot(state)    
+    plt.plot(state[:,0])    
     plt.savefig("state_graph", dpi = 200, bbox_inches='tight')
         
     final_state = state[-1]
@@ -79,9 +79,9 @@ def main():
     print(f"{reference.shape}")
     reference[0,:] = final_state 
     reference = model.run(final_state, DT, REFERENCE_STEPS) # WHY DO YOU LOOK LIKE THAT!!!!!!!!!
-    plt.plot(reference[0,:], reference[1,:])
-    plt.savefig("what's_goin_on_in_reference.png")
-    plt.show()
+    # plt.plot(reference[0,:], reference[1,:])
+    # plt.savefig("what's_goin_on_in_reference.png")
+    # plt.show()
 
     # TODO: Step 3 — Create initial condition clouds
     np.random.seed(42)  # reproducibility
