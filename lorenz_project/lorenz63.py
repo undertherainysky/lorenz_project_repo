@@ -1,6 +1,7 @@
 # lorenz63.py
 """Lorenz 1963 three-variable chaotic model."""
 import numpy as np
+import matplotlib.pyplot as plt 
 from lorenz_project.integrators import integrate
 
 
@@ -16,7 +17,7 @@ class Lorenz63:
     Default parameters (sigma=10, rho=28, beta=8/3) produce chaotic behavior.
     """
 
-    def __init__(self, sigma=10, rho=28, beta=8 / 3):
+    def __init__(self, sigma=10, rho=28, beta=(8 / 3)):
         """Store model parameters.
 
         Hint: just save sigma, rho, beta as self.sigma, etc.
@@ -47,7 +48,7 @@ class Lorenz63:
         # TODO: implement Lorenz63 equations
         x, y, z = state # state must thus be [x, y, z]
         dx_dt = self.sigma*(y - x)
-        dy_dt = x*(self.rho - z) - y
+        dy_dt = x*self.rho - y - z*x
         dz_dt = x*y - self.beta * z
         return np.array([dx_dt, dy_dt, dz_dt])
 
@@ -63,7 +64,7 @@ class Lorenz63:
         ys = state[:,1]
         zs = state[:,2]
         derivatives[:,0] = self.sigma*(ys-xs)
-        derivatives[:,1] = xs*(self.rho - zs) - ys
+        derivatives[:,1] = xs*self.rho - xs*zs - ys
         derivatives[:,2] = xs * ys - self.beta * zs
         # print(f"{derivatives.shape}")
         return derivatives
@@ -93,6 +94,7 @@ class Lorenz63:
         """
         # TODO: call integrate() with self.tendency
         trajectory = integrate(state0, self.tendency, dt, n_steps)
+        
         return trajectory
 
     def run_ensemble(self, initial_conditions, dt, n_steps):
@@ -140,7 +142,7 @@ class Lorenz63:
         # print(f"{type(ensemble_size)}")
         # ensemble_members = ensemble_size[0]
         length = n_steps+1
-        print(f"{type(length)}")
+        # print(f"{type(length)}") # debugging 
 
         # ensemble = np.zeros([ensemble_size[0], length, ensemble_size[1]])
         # for ii in range(0, ensemble_size[0]):
@@ -154,18 +156,13 @@ class Lorenz63:
         vector_ensemble = np.zeros([ensemble_size[0], length, ensemble_size[1]])
         # print(f"{vector_ensemble.shape}")
         vector_ensemble[:,0,:] = initial_conditions
+        # print(f"Vector Initial: {vector_ensemble[:,0,:]}")
         for jj in range(0, n_steps):
             
-            vector_ensemble[:, jj+1, :] = vector_ensemble[:,jj,:] + dt * self.vectorized_tendency(vector_ensemble[:,jj,:])
+            vector_ensemble[:,jj+1,:] = vector_ensemble[:,jj,:] + dt*self.vectorized_tendency(vector_ensemble[:,jj,:])
         return vector_ensemble
 
-
-
-
-
-
-                
-                
+       
 
 
 
@@ -180,6 +177,9 @@ if __name__ == "__main__":
     # Test 1: single trajectory
     traj = model.run(np.array([1.0, 1.0, 1.0]), dt=0.01, n_steps=1000)
     assert traj.shape == (1001, 3), f"Wrong shape: {traj.shape}, expected (1001, 3)"
+    plt.plot(traj)
+    plt.savefig("lorenz63_verification_graph.png", dpi = 200, bbox_inches='tight')
+    plt.show()
     print(f"Single run: final state = [{traj[-1, 0]:.2f}, {traj[-1, 1]:.2f}, {traj[-1, 2]:.2f}]")
     print(f"  trajectory shape: {traj.shape}  ✓")
 

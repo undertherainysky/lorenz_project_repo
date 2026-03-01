@@ -1,6 +1,7 @@
 # integrators.py
 """Numerical integration methods for ODE systems."""
 import numpy as np
+# import matplotlib.pyplot as plt
 
 
 def euler_step(state, tendency_fn, dt):
@@ -61,10 +62,10 @@ def integrate(state0, tendency_fn, dt, n_steps):
     """
     # TODO: implement the integration loop
     trajectory = np.zeros((n_steps + 1, len(state0)))
-    trajectory[0] = state0
+    trajectory[0,:] = state0
 
     for ii in range(0, n_steps):
-        trajectory[ii+1] = euler_step(trajectory[ii], tendency_fn, dt)
+        trajectory[ii+1,:] = euler_step(trajectory[ii,:], tendency_fn, dt)
     
     return trajectory
 
@@ -83,6 +84,11 @@ if __name__ == "__main__":
     result = integrate(np.array([1.0]), lambda y: -y, dt=0.01, n_steps=100)
     final = result[-1, 0]
     exact = np.exp(-1.0)
-    print(f"Euler result: {final:.4f}, Exact: {exact:.4f}, Error: {abs(final - exact):.4f}")
+    print(f"Euler result: {final:.10f}, Exact: {exact:.4f}, Error: {abs(final - exact):.4f}")
     assert abs(final - exact) < 0.01, f"Error too large: {abs(final - exact)}"
     print("integrators.py: all checks passed!")
+    # plt.plot(result)
+    # plt.savefig("Integrators_check.png", dpi = 150, bbox_inches='tight')
+    # plt.show()
+    # print(f"Mid-check: {result[50,0]}") # is correct?
+    

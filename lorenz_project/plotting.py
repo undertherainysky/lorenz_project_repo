@@ -67,7 +67,7 @@ def plot_ensemble(ax, ensemble_trajectories, reference_trajectory=None,
     for ii in range(0, ensemble_trajectories.shape[0]):
         plot_attractor(ax, ensemble_trajectories[ii], color = ensemble_color, alpha = 0.8)
     ax.grid(alpha = 0.3)
-    ax.set_title("Ensemble Trajectories")
+    ax.set_title(title)
     plt.savefig("Ensemble_Trajectories.png", dpi=150, bbox_inches='tight')
     return
 
@@ -107,7 +107,7 @@ def plot_ensemble_panels(ensemble_list, reference_trajectory, titles,
     # TODO: implement multi-panel figure
     fig, axes = plt.subplots(1,len(ensemble_list), figsize = figsize)
     for ii in range(0, len(ensemble_list)):
-        plot_ensemble(axes,ensemble_list[ii], reference_trajectory, title = titles[ii])
+        plot_ensemble(axes[ii],ensemble_list[ii], reference_trajectory, title = titles[ii])
     plt.tight_layout()
     if save_path != None:
         plt.savefig(save_path, bbox_inches='tight', dpi = 150)
@@ -136,6 +136,8 @@ if __name__ == "__main__":
     ensemble = lorenz63_forTesting.run_ensemble(ics, dt=0.01, n_steps=1000)
     fig_ens, ax_ens = plt.subplots()
     plot_ensemble(ax_ens, ensemble)
+    # plt.savefig("Ensemble_Trajectories.png", bbox_inches='tight', dpi = 200)
+    
     
 
 

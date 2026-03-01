@@ -36,9 +36,12 @@ Instructions
 8. Save the figure
 """
 import numpy as np
+import matplotlib.pyplot as plt
 
 # TODO: import Lorenz63 from lorenz_project.lorenz63
+from lorenz_project.lorenz63 import Lorenz63
 # TODO: import plotting functions from lorenz_project.plotting
+import lorenz_project.plotting as plot_utils
 
 # --- Configuration ---
 DT = 0.01
@@ -53,12 +56,32 @@ SAVE_PATH = "lorenz_ensemble_predictability.png"
 def main():
     """Run the full ensemble experiment."""
     # TODO: Step 1 — Create model
-    # model = Lorenz63()
+    model = Lorenz63()
 
     # TODO: Step 2 — Generate reference trajectory
     # Spin up from (1, 1, 1) for SPINUP_STEPS, then take the final state
     # and run for REFERENCE_STEPS more. The long run IS your reference.
-    
+    state = np.zeros([SPINUP_STEPS, 3])
+    state[0,:] = (1,1,1)
+    # state = model.run([1,1,1], DT, SPINUP_STEPS)
+    state = model.run([1,1,1], DT, SPINUP_STEPS)
+     
+    # for ii in range(1, SPINUP_STEPS):
+    #   state[ii,:] = state[ii-1,:] + model.tendency(state[ii-1,:])*DT
+    plt.plot(state)    
+    plt.savefig("state_graph", dpi = 200, bbox_inches='tight')
+        
+    final_state = state[-1]
+    print(f"{final_state}")
+    # print(f"{final_state}")
+    state = None # clearing the crazy 500000 long array from memory 
+    reference = np.zeros([REFERENCE_STEPS,3])
+    print(f"{reference.shape}")
+    reference[0,:] = final_state 
+    reference = model.run(final_state, DT, REFERENCE_STEPS) # WHY DO YOU LOOK LIKE THAT!!!!!!!!!
+    plt.plot(reference[0,:], reference[1,:])
+    plt.savefig("what's_goin_on_in_reference.png")
+    plt.show()
 
     # TODO: Step 3 — Create initial condition clouds
     np.random.seed(42)  # reproducibility
@@ -70,9 +93,9 @@ def main():
     ics_saddle = saddle_state + np.random.randn(N_MEMBERS, 3) * PERTURBATION_SCALE
 
     # TODO: Step 4 — Run ensembles
-    # ensemble_deep = model.run_ensemble(ics_deep, DT, ENSEMBLE_STEPS)
-    # ensemble_high = model.run_ensemble(ics_high, DT, ENSEMBLE_STEPS)
-    # ensemble_saddle = model.run_ensemble(ics_saddle, DT, ENSEMBLE_STEPS)
+    ensemble_deep = model.run_ensemble(ics_deep, DT, ENSEMBLE_STEPS)
+    ensemble_high = model.run_ensemble(ics_high, DT, ENSEMBLE_STEPS)
+    ensemble_saddle = model.run_ensemble(ics_saddle, DT, ENSEMBLE_STEPS)
 
     # TODO: Step 5 — Plot
     # plot_ensemble_panels(
@@ -81,9 +104,15 @@ def main():
     #     ["(a) Deep left lobe", "(b) High left lobe", "(c) Saddle region"],
     #     save_path=SAVE_PATH,
     # )
-
-    # print(f"Figure saved to {SAVE_PATH}")
+    plot_utils.plot_ensemble_panels([ensemble_deep, ensemble_high, ensemble_saddle], reference_trajectory=reference, 
+      titles = ["(a) Deep left lobe", "(b) High left lobe", "(c) Saddle region"], save_path = SAVE_PATH)
+    print(f"Figure saved to {SAVE_PATH}")
 
 
 if __name__ == "__main__":
     main()
+
+
+
+
+# python -m lorenz_project.run_lorenz_ensemble
