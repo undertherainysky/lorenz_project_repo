@@ -63,7 +63,7 @@ def plot_ensemble(ax, ensemble_trajectories, reference_trajectory=None,
     """
     # TODO: implement ensemble plotting
     if reference_trajectory.any() != None: 
-        ax.plot(reference_trajectory, color = ref_color, alpha = 0.4)
+        ax.plot(reference_trajectory[:,0], reference_trajectory[:,2], color = ref_color, alpha = 0.4)
     for ii in range(0, ensemble_trajectories.shape[0]):
         plot_attractor(ax, ensemble_trajectories[ii], color = ensemble_color, alpha = 0.8)
     ax.grid(alpha = 0.3)

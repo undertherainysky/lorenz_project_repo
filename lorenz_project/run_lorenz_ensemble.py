@@ -61,7 +61,7 @@ def main():
     # TODO: Step 2 — Generate reference trajectory
     # Spin up from (1, 1, 1) for SPINUP_STEPS, then take the final state
     # and run for REFERENCE_STEPS more. The long run IS your reference.
-    state_0 = (1.0,1.0,1.0)
+    state_0 = np.array([1.0,1.0,1.0])
     # state = model.run([1,1,1], DT, SPINUP_STEPS)
     state = model.run(state_0, DT, SPINUP_STEPS)
      
@@ -71,13 +71,14 @@ def main():
     plt.savefig("state_graph", dpi = 200, bbox_inches='tight')
         
     final_state = state[-1]
+    
     print(f"{final_state}")
     # print(f"{final_state}")
     state = None # clearing the crazy 500000 long array from memory 
     reference = np.zeros([REFERENCE_STEPS,3])
     print(f"{reference.shape}")
     reference[0,:] = final_state 
-    reference = model.run(final_state, DT, REFERENCE_STEPS) # WHY DO YOU LOOK LIKE THAT!!!!!!!!!
+    reference = model.run(final_state, DT, REFERENCE_STEPS) 
     # plt.plot(reference[0,:], reference[1,:])
     # plt.savefig("what's_goin_on_in_reference.png")
     # plt.show()

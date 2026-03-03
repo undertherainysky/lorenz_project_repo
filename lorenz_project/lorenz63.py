@@ -46,11 +46,9 @@ class Lorenz63:
         Return np.array([sigma*(y-x), rho*x - y - x*z, x*y - beta*z])
         """
         # TODO: implement Lorenz63 equations
-        x, y, z = state # state must thus be [x, y, z]
-        dx_dt = self.sigma*(y - x)
-        dy_dt = x*self.rho - y - z*x
-        dz_dt = x*y - self.beta * z
-        return np.array([dx_dt, dy_dt, dz_dt])
+        # x, y, z = state # state must thus be [x, y, z]
+        x, y, z = state
+        return np.array([self.sigma*(y-x), self.rho*x - y - x*z, x*y - self.beta*z])
 
     def vectorized_tendency(self, state):
         # state = (n_members, 3)
@@ -94,9 +92,22 @@ class Lorenz63:
         """
         # TODO: call integrate() with self.tendency
         trajectory = integrate(state0, self.tendency, dt, n_steps)
-        plt.plot(trajectory)
-        plt.savefig("run_internal_trajectory.png", bbox_inches='tight', dpi=150)
-        plt.show() #here too
+
+
+
+
+
+        # trajectory = np.zeros([n_steps+1, len(state0)])
+        # trajectory[0,:] = state0
+        # for ii in range(0,n_steps):
+        #     trajectory[ii+1,:] = trajectory[ii,:] + dt*self.tendency(trajectory[ii])
+        # plt.plot(trajectory)
+        # plt.savefig("run_internal_trajectory.png", bbox_inches='tight', dpi=150)
+        # plt.show() #here too
+
+
+
+
         return trajectory
 
     def run_ensemble(self, initial_conditions, dt, n_steps):
@@ -141,6 +152,7 @@ class Lorenz63:
         
         ## METHOD 1:
         ensemble_size = initial_conditions.shape
+        # ensemble_size = np.array([1,3])
         # print(f"{type(ensemble_size)}")
         # ensemble_members = ensemble_size[0]
         length = n_steps+1
@@ -195,9 +207,9 @@ if __name__ == "__main__":
 
     print("lorenz63.py: all checks passed!")
 
-    # Test 3: What's goin on!
-    state_test = model.run(np.array([1.0, 1.0, 1.0]), dt = 0.01, n_steps = 500000)
-    plt.plot(state_test)
-    plt.savefig("State_test_run_IN_lorenz63.png", bbox_inches = 'tight', dpi = 150)
-    plt.show()
-    # oooooook so here too
+    # # Test 3: What's goin on!
+    # state_test = model.run(np.array([1.0, 1.0, 1.0]), dt = 0.01, n_steps = 500000)
+    # plt.plot(state_test)
+    # plt.savefig("State_test_run_IN_lorenz63.png", bbox_inches = 'tight', dpi = 150)
+    # plt.show()
+    # # oooooook so here too

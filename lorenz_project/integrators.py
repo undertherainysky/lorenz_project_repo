@@ -1,7 +1,7 @@
 # integrators.py
 """Numerical integration methods for ODE systems."""
 import numpy as np
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 
 def euler_step(state, tendency_fn, dt):
@@ -66,9 +66,10 @@ def integrate(state0, tendency_fn, dt, n_steps):
 
     for ii in range(0, n_steps):
         trajectory[ii+1,:] = euler_step(trajectory[ii,:], tendency_fn, dt)
-    plt.plot(trajectory)
-    plt.savefig("integrate_internal_trajectory.png", dpi=150, bbox_inches='tight')
-    plt.show()
+        # trajectory[ii+1,:] = trajectory[ii,:] + dt * tendency_fn(trajectory[ii,:])
+    # plt.plot(trajectory)
+    # plt.savefig("integrate_internal_trajectory.png", dpi=150, bbox_inches='tight')
+    # plt.show()
     return trajectory
 
 
