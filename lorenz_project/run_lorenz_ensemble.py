@@ -61,10 +61,9 @@ def main():
     # TODO: Step 2 — Generate reference trajectory
     # Spin up from (1, 1, 1) for SPINUP_STEPS, then take the final state
     # and run for REFERENCE_STEPS more. The long run IS your reference.
-    state = np.zeros([SPINUP_STEPS, 3])
-    state[0,:] = (1.0,1.0,1.0)
+    state_0 = (1.0,1.0,1.0)
     # state = model.run([1,1,1], DT, SPINUP_STEPS)
-    state = model.run(state[0,:], DT, SPINUP_STEPS)
+    state = model.run(state_0, DT, SPINUP_STEPS)
      
     # for ii in range(1, SPINUP_STEPS):
     #   state[ii,:] = state[ii-1,:] + model.tendency(state[ii-1,:])*DT

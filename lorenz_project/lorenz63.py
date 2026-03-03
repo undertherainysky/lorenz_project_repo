@@ -94,7 +94,9 @@ class Lorenz63:
         """
         # TODO: call integrate() with self.tendency
         trajectory = integrate(state0, self.tendency, dt, n_steps)
-        
+        plt.plot(trajectory)
+        plt.savefig("run_internal_trajectory.png", bbox_inches='tight', dpi=150)
+        plt.show() #here too
         return trajectory
 
     def run_ensemble(self, initial_conditions, dt, n_steps):
@@ -192,3 +194,10 @@ if __name__ == "__main__":
     print(f"Ensemble run: shape = {ensemble.shape}  ✓")
 
     print("lorenz63.py: all checks passed!")
+
+    # Test 3: What's goin on!
+    state_test = model.run(np.array([1.0, 1.0, 1.0]), dt = 0.01, n_steps = 500000)
+    plt.plot(state_test)
+    plt.savefig("State_test_run_IN_lorenz63.png", bbox_inches = 'tight', dpi = 150)
+    plt.show()
+    # oooooook so here too
